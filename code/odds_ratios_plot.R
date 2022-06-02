@@ -7,10 +7,8 @@ setwd(bdir)
 
 #load packages
 install.packages("ggplot2")
-install.packages("randomcoloR")
 install.packages('svglite')
 library(ggplot2)
-library(randomcoloR)
 library(svglite)
 
 #make data frame with hard coded odds ratios and 95% CIs (taken from logistic regression output)
@@ -24,14 +22,18 @@ odds_ratios_df = data.frame(index = c(1:10),
                             lower = c(3.310, 2.473, 1.957, 1.817, 1.198, 1.072,
                                       1.071, 0.661, 0.614, 0.609),
                             upper = c(4.140, 3.344, 2.720, 2.243, 1.604, 1.360,
-                                      1.326, 0.951, 0.995, 0.768))
+                                      1.326, 0.951, 0.995, 0.768),
+                            colors = c("gold", "goldenrod", "hotpink", "darkgreen", "aquamarine",
+                                       "darkblue", "darkslategray", "magenta", "dodgerblue",
+                                       "maroon")
+)
 
 #make forest plot
-colors = randomColor(count = 10, luminosity = "dark")
 g = ggplot(data = odds_ratios_df,
            aes(y=index, x=effect, xmin=lower, xmax=upper)) +
-  geom_point(shape=18, size=5, color = colors) +
-  geom_errorbarh(height=0.3, color = colors) +
+  geom_point(shape=18, size=14, color = odds_ratios_df$colors) +
+  geom_errorbarh(height=0.7, color = odds_ratios_df$colors) +
+  scale_x_continuous(trans="log10") +
   scale_y_continuous(name="Antibiotic", 
                    breaks=1:nrow(odds_ratios_df), 
                    labels=odds_ratios_df$antibiotic,
@@ -39,7 +41,7 @@ g = ggplot(data = odds_ratios_df,
   xlab("Adjusted Relative Risk of C. difficile Infection (Reference = Doxycycline)") +
   labs(title = "Relative Risk of C. difficile Infection Across Antibiotic Classes") +
   geom_vline(xintercept=1, color='red', linetype='dashed', cex=1, alpha=0.5) +
-  theme_bw(base_size=20) +
+  theme_bw(base_size=26) +
   theme(plot.title=element_text(hjust=0.5))
 
 ggsave(filename="results/odds_ratios_plot_color.svg",

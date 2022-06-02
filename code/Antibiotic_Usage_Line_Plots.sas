@@ -1,7 +1,7 @@
 /* Antibiotic_Usage_Line_Plots.sas
 Summary: line plots summarizing antibiotic usage trends over time
 Created by: Jimmy Zhang @ 5/4/22
-Modified by: Jimmy Zhang @ 5/4/22
+Modified by: Jimmy Zhang @ 5/23/22
 */
 
 *combine CCAE and MDCR freq tables;
@@ -75,22 +75,34 @@ data mine.drugs_freq_all_by_year_combined;
 	end;
 run;
 
+*change DRUGNAME to Antibiotic;
+data mine.drugs_freq_all_by_year_combined;
+	set mine.drugs_freq_all_by_year_combined;
+	rename DRUGNAME = Antibiotic;
+run;
+
 /* (LINE PLOT) prescription rates by year*/
+ods graphics / attrpriority=none;
+
 title "Prescription Rates of Top Antibiotic Classes";
 proc sgplot data=mine.drugs_freq_all_by_year_combined;
-	series x=YEAR  y=COUNT_PER_1000_PERSON_YEARS / group=DRUGNAME;
-	xaxis label= "Year" ;
+	series x=YEAR  y=COUNT_PER_1000_PERSON_YEARS / group=Antibiotic;
+	xaxis label= "Year";
 	yaxis label= "Prescriptions per 1,000 Person-Years" type=log logbase=10;
+	styleattrs datacontrastcolors=(darkslategray maroon green darkblue gold lime aquamarine CXff00ff dodgerblue goldenrod hotpink)
+				   datalinepatterns=(Solid Dash);
 run;
 title;
 
 /* (LINE PLOT) prescription rates by year, normalized to 2008 */
 title "Prescription Rates of Top Antibiotic Classes (Normalized to 2008)";
 proc sgplot data=mine.drugs_freq_all_by_year_combined;
-	series x=YEAR  y=COUNT_NORM / group=DRUGNAME;
+	series x=YEAR  y=COUNT_NORM / group=Antibiotic;
 	xaxis label= "Year";
 	yaxis label="Prescription Rate (Relative to 2008)" type=log logbase=10;
 	refline 1 / axis=y lineattrs=(thickness=3 color=darkred pattern=dash) 
 				label=("No change");
+	styleattrs datacontrastcolors=(darkslategray maroon green darkblue gold lime aquamarine CXff00ff dodgerblue goldenrod hotpink)
+				   datalinepatterns=(Solid Dash);
 run;
 title;
