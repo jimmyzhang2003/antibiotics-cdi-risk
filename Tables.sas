@@ -13,7 +13,7 @@ libname tmp 'G:\def2004/tmp';
 
 *----------------------------------------------------------------------------------------------;
 
-/*For all tables, use mine.exposures_final */
+/*For tables, use mine.exposures_final */
 
 /* TABLE 1: Cohort Characteristics/Descriptive Table of Exposures*/
 proc surveyfreq data=mine.exposures_final;

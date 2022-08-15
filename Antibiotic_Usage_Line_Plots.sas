@@ -4,39 +4,107 @@ Created by: Jimmy Zhang @ 5/4/22
 Modified by: Jimmy Zhang @ 5/23/22
 */
 
-*combine CCAE and MDCR freq tables;
+*create libraries;
+libname ccae 'F:/CCAE';
+libname mdcr 'F:/MDCR';
+libname mine 'G:\def2004/cdi_marketscan';
+libname redbook 'F:/Redbook';
+libname tmp 'G:\def2004/tmp';
+
+*----------------------------------------------------------------------------------------------;
+
+*create table of number of unique patients per year;
 proc sql;
-	CREATE TABLE mine.unique_adults_per_year_combined AS
-	SELECT x.YEAR, x.NUM_UNIQUE_PATIENTS + y.NUM_UNIQUE_PATIENTS AS NUM_UNIQUE_PATIENTS
-	FROM mine.unique_adults_per_year_table as x INNER JOIN mine.unique_adults_per_year_mdcr AS y
-	ON x.YEAR = y.YEAR;
+	CREATE TABLE mine.unique_adults_per_year_table AS
+	SELECT 2008 as YEAR, COUNT(DISTINCT drug_08_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_08_view;
 quit;
 
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_08, mdcr_freq_table=mine.drugs_freq_08_mdcr, output=mine.drugs_freq_08_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_09, mdcr_freq_table=mine.drugs_freq_09_mdcr, output=mine.drugs_freq_09_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_10, mdcr_freq_table=mine.drugs_freq_10_mdcr, output=mine.drugs_freq_10_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_11, mdcr_freq_table=mine.drugs_freq_11_mdcr, output=mine.drugs_freq_11_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_12, mdcr_freq_table=mine.drugs_freq_12_mdcr, output=mine.drugs_freq_12_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_13, mdcr_freq_table=mine.drugs_freq_13_mdcr, output=mine.drugs_freq_13_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_14, mdcr_freq_table=mine.drugs_freq_14_mdcr, output=mine.drugs_freq_14_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_15, mdcr_freq_table=mine.drugs_freq_15_mdcr, output=mine.drugs_freq_15_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_16, mdcr_freq_table=mine.drugs_freq_16_mdcr, output=mine.drugs_freq_16_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_17, mdcr_freq_table=mine.drugs_freq_17_mdcr, output=mine.drugs_freq_17_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_18, mdcr_freq_table=mine.drugs_freq_18_mdcr, output=mine.drugs_freq_18_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_19, mdcr_freq_table=mine.drugs_freq_19_mdcr, output=mine.drugs_freq_19_combined);
-%merge_drug_freq(ccae_freq_table=mine.drugs_freq_20, mdcr_freq_table=mine.drugs_freq_20_mdcr, output=mine.drugs_freq_20_combined);
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2009 as YEAR, COUNT(DISTINCT drug_09_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_09_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2010 as YEAR, COUNT(DISTINCT drug_10_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_10_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2011 as YEAR, COUNT(DISTINCT drug_11_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_11_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2012 as YEAR, COUNT(DISTINCT drug_12_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_12_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2013 as YEAR, COUNT(DISTINCT drug_13_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_13_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2014 as YEAR, COUNT(DISTINCT drug_14_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_14_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2015 as YEAR, COUNT(DISTINCT drug_15_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_15_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2016 as YEAR, COUNT(DISTINCT drug_16_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_16_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2017 as YEAR, COUNT(DISTINCT drug_17_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_17_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2018 as YEAR, COUNT(DISTINCT drug_18_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_18_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2019 as YEAR, COUNT(DISTINCT drug_19_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_19_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2020 as YEAR, COUNT(DISTINCT drug_20_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_20_view;
+quit;
+
+*get drug frequencies for each year;
+%get_drug_freq(input=mine.exposures_08, output=mine.drugs_freq_08, year=2008);
+%get_drug_freq(input=mine.exposures_09, output=mine.drugs_freq_09, year=2009);
+%get_drug_freq(input=mine.exposures_10, output=mine.drugs_freq_10, year=2010);
+%get_drug_freq(input=mine.exposures_11, output=mine.drugs_freq_11, year=2011);
+%get_drug_freq(input=mine.exposures_12, output=mine.drugs_freq_12, year=2012);
+%get_drug_freq(input=mine.exposures_13, output=mine.drugs_freq_13, year=2013);
+%get_drug_freq(input=mine.exposures_14, output=mine.drugs_freq_14, year=2014);
+%get_drug_freq(input=mine.exposures_15, output=mine.drugs_freq_15, year=2015);
+%get_drug_freq(input=mine.exposures_16, output=mine.drugs_freq_16, year=2016);
+%get_drug_freq(input=mine.exposures_17, output=mine.drugs_freq_17, year=2017);
+%get_drug_freq(input=mine.exposures_18, output=mine.drugs_freq_18, year=2018);
+%get_drug_freq(input=mine.exposures_19, output=mine.drugs_freq_19, year=2019);
+%get_drug_freq(input=mine.exposures_20, output=mine.drugs_freq_20, year=2020);
 
 *join all drug freq datasets together;
-data mine.drugs_freq_all_by_year_combined;
-	set mine.drugs_freq_08_combined mine.drugs_freq_09_combined mine.drugs_freq_10_combined mine.drugs_freq_11_combined
-		mine.drugs_freq_12_combined mine.drugs_freq_13_combined mine.drugs_freq_14_combined mine.drugs_freq_15_combined
-		mine.drugs_freq_16_combined mine.drugs_freq_17_combined mine.drugs_freq_18_combined mine.drugs_freq_19_combined
-		mine.drugs_freq_20_combined;
+data mine.drugs_freq_all_by_year;
+	set mine.drugs_freq_08 mine.drugs_freq_09 mine.drugs_freq_10 mine.drugs_freq_11
+		 mine.drugs_freq_12 mine.drugs_freq_13 mine.drugs_freq_14 mine.drugs_freq_15
+		 mine.drugs_freq_16 mine.drugs_freq_17 mine.drugs_freq_18 mine.drugs_freq_19
+		 mine.drugs_freq_20;
 run;	
 
-*add column denoting total number of unique patients for that year;
-data mine.drugs_freq_all_by_year_combined;
-	set mine.drugs_freq_all_by_year_combined;
+*add column denoting total number of unique patients for that year (based on UNIQUE_ADULTS_PER_YEAR_TABLE);
+data mine.drugs_freq_all_by_year;
+	set mine.drugs_freq_all_by_year;
 	select (year(YEAR));
 		when (2008) NUM_UNIQUE_PATIENTS = 21104880;
 		when (2009) NUM_UNIQUE_PATIENTS = 23620708;
@@ -56,8 +124,8 @@ data mine.drugs_freq_all_by_year_combined;
 run;
 
 *add columns denoting number of 1000 person-years (i.e. just divide by 1000) and normalized count;
-data mine.drugs_freq_all_by_year_combined;
-	set mine.drugs_freq_all_by_year_combined;
+data mine.drugs_freq_all_by_year;
+	set mine.drugs_freq_all_by_year;
 	COUNT_PER_1000_PERSON_YEARS = COUNT / (NUM_UNIQUE_PATIENTS/ 1000);
 	select (strip(upcase(DRUGNAME)));
 		when ('AMOXICILLIN') COUNT_NORM = COUNT_PER_1000_PERSON_YEARS / 228.42873307;
@@ -75,9 +143,9 @@ data mine.drugs_freq_all_by_year_combined;
 	end;
 run;
 
-*change DRUGNAME to Antibiotic;
-data mine.drugs_freq_all_by_year_combined;
-	set mine.drugs_freq_all_by_year_combined;
+*rename DRUGNAME to Antibiotic;
+data mine.drugs_freq_all_by_year;
+	set mine.drugs_freq_all_by_year;
 	rename DRUGNAME = Antibiotic;
 run;
 
@@ -85,7 +153,7 @@ run;
 ods graphics / attrpriority=none;
 
 title "Prescription Rates of Top Antibiotic Classes";
-proc sgplot data=mine.drugs_freq_all_by_year_combined;
+proc sgplot data=mine.drugs_freq_all_by_year;
 	series x=YEAR  y=COUNT_PER_1000_PERSON_YEARS / group=Antibiotic;
 	xaxis label= "Year";
 	yaxis label= "Prescriptions per 1,000 Person-Years" type=log logbase=10;
@@ -96,7 +164,7 @@ title;
 
 /* (LINE PLOT) prescription rates by year, normalized to 2008 */
 title "Prescription Rates of Top Antibiotic Classes (Normalized to 2008)";
-proc sgplot data=mine.drugs_freq_all_by_year_combined;
+proc sgplot data=mine.drugs_freq_all_by_year;
 	series x=YEAR  y=COUNT_NORM / group=Antibiotic;
 	xaxis label= "Year";
 	yaxis label="Prescription Rate (Relative to 2008)" type=log logbase=10;

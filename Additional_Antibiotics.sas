@@ -63,14 +63,14 @@ data mine.exposures_all_combined_with_add_abx_final;
 run;
 	
 *convert missing values in additional antibiotics variable to zeroes;
-data mine.exposures_all_final;
+data mine.exposures_final;
 	set mine.exposures_all_combined_with_add_abx_final;
 	ADD_ABX = coalesce(ADD_ABX, 0);
 run;
 
 *add a categorical variable for additional antibiotics with categories 0, 1, and 2+;
-data mine.exposures_all_final;
-	set mine.exposures_all_final;
+data mine.exposures_final;
+	set mine.exposures_final;
 	if ADD_ABX >= 2 then ADD_ABX_CAT = '2+';
 	else ADD_ABX_CAT = ADD_ABX;
 run;
