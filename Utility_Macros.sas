@@ -30,9 +30,9 @@ Modified by: Jimmy Zhang @ 7/20/22
 %MEND;
 
 *macro function for renaming exposure drugs in dataset;
-%MACRO rename_exposure_drugs(input=, output=);
+%MACRO rename_exposure_drugs(input1=, input2=, output=);
 	data &output;
-		set &input;
+		set &input1 &input2;
 		format DRUGNAME $20.;
 		select (THERDTL);
 			when (812160005) DRUGNAME = "AMOXICILLIN";
@@ -95,9 +95,14 @@ date and three months after the index date;
 %MEND;
 
 %MACRO cont_enroll_prior_1(exposures=, enrollment=, output=);
+	*sort by ENROLID;
+	proc sort data=&exposures;
+		by ENROLID;
+	run;
+
 	*prior year;
 	data &output;
-		merge &exposures(in=a keep=SEQNUM ENROLID SVCDATE YEAR REGION AGEGRP SEX DRUGNAME CDI_FLAG PRIOR_HOSPITALIZATION CCI_CAT DIAGNOSISDATE) 
+		merge &exposures(in=a) 
 			  &enrollment(in=b keep=ENROLID ENRIND1-ENRIND12);
 		by ENROLID;
 		if a;
@@ -117,9 +122,14 @@ date and three months after the index date;
 %MEND cont_enroll_prior_1;
 
 %MACRO cont_enroll_prior_0(exposures=, output=);
+	*sort by ENROLID;
+	proc sort data=&exposures;
+		by ENROLID;
+	run;
+	
 	*prior year;
 	data &output;
-		set &exposures(in=a keep=SEQNUM ENROLID SVCDATE YEAR REGION AGEGRP SEX DRUGNAME CDI_FLAG PRIOR_HOSPITALIZATION CCI_CAT DIAGNOSISDATE);
+		set &exposures(in=a);
 		MONTH = month(SVCDATE);
 		ENROLLED1 = 1;
 		*if in the first 3 months of 2008, delete because we will not have continuous enrollment for 3 months prior;
@@ -130,7 +140,7 @@ date and three months after the index date;
 %MACRO cont_enroll_curr(exposures=, enrollment=, output=);
 	*current year;
 	data &output;
-		merge &exposures(in=a keep=SEQNUM ENROLID SVCDATE YEAR REGION AGEGRP SEX DRUGNAME CDI_FLAG PRIOR_HOSPITALIZATION CCI_CAT DIAGNOSISDATE ENROLLED1 MONTH) 
+		merge &exposures(in=a) 
 			  &enrollment(in=b keep=ENROLID ENRIND1-ENRIND12);
 		by ENROLID;
 		if a;
@@ -151,7 +161,7 @@ date and three months after the index date;
 %MACRO cont_enroll_after_1(exposures=, enrollment=, output=);
 	*subsequent year;
 	data &output;
-		merge &exposures(in=a keep=SEQNUM ENROLID SVCDATE YEAR REGION AGEGRP SEX DRUGNAME CDI_FLAG PRIOR_HOSPITALIZATION CCI_CAT DIAGNOSISDATE ENROLLED1-ENROLLED2 MONTH)
+		merge &exposures(in=a)
 			  &enrollment(in=b keep=ENROLID ENRIND1-ENRIND12);
 		by ENROLID;
 		if a;
@@ -173,7 +183,7 @@ date and three months after the index date;
 %MACRO cont_enroll_after_0(exposures=, output=);
 	*subsequent year;
 	data &output;
-		set &exposures(keep=SEQNUM ENROLID SVCDATE YEAR REGION AGEGRP SEX DRUGNAME CDI_FLAG PRIOR_HOSPITALIZATION CCI_CAT DIAGNOSISDATE ENROLLED1-ENROLLED2 MONTH);
+		set &exposures;
 		*if in the last 3 months of 2020, delete because we will not have continuous enrollment for 3 months after;
 		if MONTH < 10 & ENROLLED1 & ENROLLED2;
 		drop ENRIND1-ENRIND12 MONTH ENROLLED1-ENROLLED2;
