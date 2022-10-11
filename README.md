@@ -26,5 +26,4 @@ This project leverages the MarketScan database, a large commercial insurance bil
 
 ## Contact
 
-Correspondence to: Jimmy Zhang, Columbia University
-Email: jimmyzhang2003@gmail.com
+Correspondence to: Jimmy Zhang, Columbia University, jimmyzhang2003@gmail.com
