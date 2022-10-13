@@ -67,6 +67,17 @@ Modified by: Jimmy Zhang @ 7/20/22
 	run;
 %MEND;
 
+*macro for joining and sorting to get unique patients across dataset years;
+%MACRO join_sort_unique_patients(data1=, data2=, output=);
+	data &output;
+		set &data1 &data2;
+    run;
+	
+	proc sort data=&output nodupkey;
+		by ENROLID;
+	run;
+%MEND;
+
 *----------------------------------------------------------------------------------------------;
 
 /*FOR DETERMINING CONTINUOUS ENROLLMENT*/
@@ -209,29 +220,25 @@ date and three months after the index date;
 
 *macro for marking CDI cases in the exposures dataset;
 %MACRO create_CDI_flag(exposures=, outcomes=, output=);
-	proc sql;
-		CREATE TABLE &output AS
-		SELECT exp.*, out.OUTCOME_DRUG_SVCDATE, out.SVCDATE AS DIAGNOSISDATE
-			CASE
-				WHEN OUTCOME_DRUG_SVCDATE = . THEN 0
-				ELSE 1
-			END AS CDI_FLAG
-		FROM &exposures AS exp LEFT JOIN &outcomes AS out
-		ON exp.ENROLID = out.ENROLID AND exp.SVCDATE >= DIAGNOSISDATE - 90 AND DIAGNOSISDATE >= exp.SVCDATE;
-	quit;
-
+    data &output;
+        merge &exposures(in=a) &outcomes(in=b keep=ENROLID SVCDATE rename=(SVCDATE=DIAGNOSISDATE));
+        if a;
+        by ENROLID;
+        if DIAGNOSISDATE and SVCDATE >= DIAGNOSISDATE-90 and DIAGNOSISDATE >= SVCDATE then CDI_FLAG_NEW = 1;
+        else CDI_FLAG = 0;
+    run;
+        
     *only take the first diagnosis after antibiotic prescription;
     proc sort data=&output;
-	    by ENROLID descending CDI_FLAG DIAGNOSISDATE;
-    run;
-
+        by ENROLID descending CDI_FLAG_NEW DIAGNOSISDATE;
+        
     data &output;
-	    set &output;
-	    by ENROLID;
-	    if FIRST.ENROLID;
+        set &output;
+        by ENROLID;
+        if FIRST.ENROLID;
     run;
 
-    *drop diagnosis date for patients without CDI_FLAG = 1;
+    *drop diagnosis date for patients without CDI_FLAG_NEW = 1;
     data &output;
         set &output;
         if CDI_FLAG = 0 then DIAGNOSISDATE = .;

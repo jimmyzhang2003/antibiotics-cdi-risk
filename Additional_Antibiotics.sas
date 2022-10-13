@@ -13,18 +13,19 @@ libname tmp 'G:\def2004/tmp';
 
 *----------------------------------------------------------------------------------------------;
 
-/* combine each year's dataset into a combined dataset of ~36 million continuously enrolled patients */
-data mine.exposures_all_combined;
-    set mine.exposures_08_with_hosp_cci mine.exposures_09_with_hosp_cci mine.exposures_10_with_hosp_cci mine.exposures_11_with_hosp_cci
-        mine.exposures_12_with_hosp_cci mine.exposures_13_with_hosp_cci mine.exposures_14_with_hosp_cci mine.exposures_15_with_hosp_cci
-        mine.exposures_16_with_hosp_cci mine.exposures_17_with_hosp_cci mine.exposures_18_with_hosp_cci mine.exposures_19_with_hosp_cci
-        mine.exposures_20_with_hosp_cci;
-run;
-
-*sort combined exposures dataset;
-proc sort data=mine.exposures_all_combined out=mine.exposures_all_combined_sorted;
-	by ENROLID SVCDATE;
-run;
+/* combine each year's dataset into a combined dataset by joining and removing duplicates across years */
+%join_sort_unique_patients(data1=mine.exposures_08_with_hosp_cci, data2=mine.exposures_09_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_10_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_11_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_12_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_13_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_14_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_15_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_16_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_17_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_18_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_19_with_hosp_cci, output=mine.exposures_all_combined);
+%join_sort_unique_patients(data1=mine.exposures_all_combined, data2=mine.exposures_20_with_hosp_cci, output=mine.exposures_all_combined);
 
 *create dataset of all exposures (non-unique patients);
 data mine.exposures_all_non_unique;
@@ -36,7 +37,7 @@ run;
 
 *create dataset with patients who received additional antibiotics;
 data mine.exposures_all_combined_with_add_abx;
-	merge mine.exposures_all_combined_sorted(in=a) mine.exposures_all_non_unique(in=b rename=(SVCDATE=SVCDATE2 DRUGNAME=DRUGNAME2));
+	merge mine.exposures_all_combined(in=a) mine.exposures_all_non_unique(in=b rename=(SVCDATE=SVCDATE2 DRUGNAME=DRUGNAME2));
 	if a and SVCDATE2 >= SVCDATE and SVCDATE2 <= min(SVCDATE+90, DIAGNOSISDATE) and DRUGNAME ^= DRUGNAME2; *check if additional antibiotics were prescribed within 90 days or before a CDI diagnosis, whichever occurred first;
 	by ENROLID;
 	drop SVCDATE2;

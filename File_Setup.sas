@@ -183,11 +183,27 @@ quit;
 %rename_outcome_drugs(input=mine.drug_18_view, output=mine.outcomes_18);
 %rename_outcome_drugs(input=mine.drug_19_view, output=mine.outcomes_19);
 %rename_outcome_drugs(input=mine.drug_20_view, output=mine.outcomes_20);
+%rename_outcome_drugs(input=mine.drug_08_mdcr_view, output=mine.outcomes_08_mdcr);
+%rename_outcome_drugs(input=mine.drug_09_mdcr_view, output=mine.outcomes_09_mdcr);
+%rename_outcome_drugs(input=mine.drug_10_mdcr_view, output=mine.outcomes_10_mdcr);
+%rename_outcome_drugs(input=mine.drug_11_mdcr_view, output=mine.outcomes_11_mdcr);
+%rename_outcome_drugs(input=mine.drug_12_mdcr_view, output=mine.outcomes_12_mdcr);
+%rename_outcome_drugs(input=mine.drug_13_mdcr_view, output=mine.outcomes_13_mdcr);
+%rename_outcome_drugs(input=mine.drug_14_mdcr_view, output=mine.outcomes_14_mdcr);
+%rename_outcome_drugs(input=mine.drug_15_mdcr_view, output=mine.outcomes_15_mdcr);
+%rename_outcome_drugs(input=mine.drug_16_mdcr_view, output=mine.outcomes_16_mdcr);
+%rename_outcome_drugs(input=mine.drug_17_mdcr_view, output=mine.outcomes_17_mdcr);
+%rename_outcome_drugs(input=mine.drug_18_mdcr_view, output=mine.outcomes_18_mdcr);
+%rename_outcome_drugs(input=mine.drug_19_mdcr_view, output=mine.outcomes_19_mdcr);
+%rename_outcome_drugs(input=mine.drug_20_mdcr_view, output=mine.outcomes_20_mdcr);
 
 data mine.outcomes_all;
 	set mine.outcomes_08 mine.outcomes_09 mine.outcomes_10 mine.outcomes_11 mine.outcomes_12
 		mine.outcomes_13 mine.outcomes_14 mine.outcomes_15 mine.outcomes_16 mine.outcomes_17
 		mine.outcomes_18 mine.outcomes_19 mine.outcomes_20;
+        mine.outcomes_08_mdcr mine.outcomes_09_mdcr mine.outcomes_10_mdcr mine.outcomes_11_mdcr mine.outcomes_12_mdcr
+		mine.outcomes_13_mdcr mine.outcomes_14_mdcr mine.outcomes_15_mdcr mine.outcomes_16_mdcr mine.outcomes_17_mdcr
+		mine.outcomes_18_mdcr mine.outcomes_19_mdcr mine.outcomes_20_mdcr;
 run;
 
 /* DX Codes for CDiff: ICD9 (00845), ICD10 (A047, A0471, and A0472)  */
