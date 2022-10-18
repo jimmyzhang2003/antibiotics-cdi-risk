@@ -1,7 +1,7 @@
 /* Antibiotic_Usage_Line_Plots.sas
 Summary: line plots summarizing antibiotic usage trends over time
 Created by: Jimmy Zhang @ 5/4/22
-Modified by: Jimmy Zhang @ 5/23/22
+Modified by: Jimmy Zhang @ 10/18/22
 */
 
 *create libraries;
@@ -21,7 +21,17 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2008 as YEAR, COUNT(DISTINCT drug_08_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_08_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2009 as YEAR, COUNT(DISTINCT drug_09_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_09_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2009 as YEAR, COUNT(DISTINCT drug_09_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_09_mdcr_view;
 quit;
 
 proc sql;
@@ -31,7 +41,17 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2010 as YEAR, COUNT(DISTINCT drug_10_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_10_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2011 as YEAR, COUNT(DISTINCT drug_11_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_11_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2011 as YEAR, COUNT(DISTINCT drug_11_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_11_mdcr_view;
 quit;
 
 proc sql;
@@ -41,7 +61,17 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2012 as YEAR, COUNT(DISTINCT drug_12_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_12_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2013 as YEAR, COUNT(DISTINCT drug_13_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_13_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2013 as YEAR, COUNT(DISTINCT drug_13_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_13_mdcr_view;
 quit;
 
 proc sql;
@@ -51,7 +81,17 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2014 as YEAR, COUNT(DISTINCT drug_14_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_14_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2015 as YEAR, COUNT(DISTINCT drug_15_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_15_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2015 as YEAR, COUNT(DISTINCT drug_15_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_15_mdcr_view;
 quit;
 
 proc sql;
@@ -61,7 +101,17 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2016 as YEAR, COUNT(DISTINCT drug_16_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_16_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2017 as YEAR, COUNT(DISTINCT drug_17_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_17_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2017 as YEAR, COUNT(DISTINCT drug_17_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_17_mdcr_view;
 quit;
 
 proc sql;
@@ -71,12 +121,33 @@ quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2018 as YEAR, COUNT(DISTINCT drug_18_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_18_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2019 as YEAR, COUNT(DISTINCT drug_19_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_19_view;
 quit;
 
 proc sql;
 	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2019 as YEAR, COUNT(DISTINCT drug_19_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_19_mdcr_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
 	SELECT 2020 as YEAR, COUNT(DISTINCT drug_20_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_20_view;
+quit;
+
+proc sql;
+	INSERT INTO mine.unique_adults_per_year_table
+	SELECT 2020 as YEAR, COUNT(DISTINCT drug_20_mdcr_view.ENROLID) AS NUM_UNIQUE_PATIENTS FROM mine.drug_20_mdcr_view;
+quit;
+
+*sum up the CCAE and MDCR rows for each year;
+proc sql;
+    SELECT YEAR, SUM(NUM_UNIQUE_PATIENTS) AS NUM_UNIQUE_PATIENTS FROM mine.unique_adults_per_year_table
+    GROUP BY YEAR;
 quit;
 
 *get drug frequencies for each year;
@@ -150,10 +221,10 @@ data mine.drugs_freq_all_by_year;
 run;
 
 /* (LINE PLOT) prescription rates by year*/
-ods graphics / attrpriority=none;
+ods graphics / imagefmt=SVG imagemap=off attrpriority=none;
 
 title "Prescription Rates of Top Antibiotic Classes";
-proc sgplot data=mine.drugs_freq_all_by_year;
+proc sgplot data=mine.drugs_freq_all_by_year_combined;
 	series x=YEAR  y=COUNT_PER_1000_PERSON_YEARS / group=Antibiotic;
 	xaxis label= "Year";
 	yaxis label= "Prescriptions per 1,000 Person-Years" type=log logbase=10;
@@ -164,7 +235,7 @@ title;
 
 /* (LINE PLOT) prescription rates by year, normalized to 2008 */
 title "Prescription Rates of Top Antibiotic Classes (Normalized to 2008)";
-proc sgplot data=mine.drugs_freq_all_by_year;
+proc sgplot data=mine.drugs_freq_all_by_year_combined;
 	series x=YEAR  y=COUNT_NORM / group=Antibiotic;
 	xaxis label= "Year";
 	yaxis label="Prescription Rate (Relative to 2008)" type=log logbase=10;
