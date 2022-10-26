@@ -1,10 +1,12 @@
 # antibiotics-cdi-risk
 
-## Summary
+## Title
 
-Clostridioides difficile infection (CDI) is a contagious bacterial infection that typically causes diarrhea and colitis in symptomatic patients. Antibiotic use has been regarded as one of the most important (and modifiable) risk factors of CDI infection. Transmission of CDI occurs along the fecal-oral route, and though CDI has been considered to be a predominantly hospital-acquired infection, recent evidence has shown that community-acquired CDI constitutes a large proportion of CDI cases. However, community-acquired CDI is still not fully understood, and further research is required to confirm the specific antibiotic classes that are associated with CDI risk.
+Antibiotic-Specific Risk for Community-Acquired _Clostridioides difficile_ Infection in the United States from 2008 to 2020
 
-This project leverages the MarketScan database, a large commercial insurance billing database containing over 40 million unique patient records, to identify associations between specific antibiotic classes and risk for CDI.
+## Abstract
+
+Antibiotic exposure is a crucial risk factor for community-acquired _Clostridioides difficile_ infection (CA-CDI). However, the relative risks associated with specific antibiotics may vary over time, and the absolute risks have not been clearly established. This was a retrospective cohort study. Adults were included if they received an outpatient antibiotic prescription within the IBM® MarketScan® Databases between 2008 and 2020. The primary exposure was an outpatient antibiotic prescription, and receipt of doxycycline was used as the reference comparison. The primary outcome was CA-CDI, defined as the presence of an ICD diagnosis code for CDI within 90 days of receiving an outpatient antibiotic prescription, and subsequent treatment for CDI. There were 36,626,794 unique patients who received outpatient antibiotics including 11,607 (0.03%) who developed CA-CDI. Relative to doxycycline, the antibiotics conferring the highest risks for CA-CDI were clindamycin (adjusted odds ratio [aOR] 8.81, 95% confidence interval [CI]: 7.76-10.00), cefdinir (aOR 5.86, 95% CI: 5.03-6.83), cefuroxime (aOR 4.57, 95% CI: 3.87-5.39), and fluoroquinolones (aOR 4.05, 95% CI: 3.58-4.59). Among older patients with CA-CDI risk factors, nitrofurantoin was also associated with CA-CDI (aOR 3.05, 95% CI: 1.92-4.84), with fewer number needed to harm compared to fluoroquinolones. While clindamycin, cefuroxime, and fluoroquinolone use declined from 2008 to 2020, nitrofurantoin use increased by 40%. Clindamycin was associated with the greatest CA-CDI risk overall. Among older patients with elevated baseline risk for CA-CDI, multiple antibiotics, including nitrofurantoin, had strong associations with CA-CDI. These results may guide antibiotic selection and future stewardship efforts.
 
 ## File Structure
 
@@ -23,6 +25,8 @@ This project leverages the MarketScan database, a large commercial insurance bil
     ├── odds_ratios_plot.R
     └── README.md
 ```
+
+## Citation
 
 ## Contact
 
