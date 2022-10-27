@@ -730,8 +730,8 @@ run;
 
 *adjusted logistic regression model with bactrim;
 proc logistic data=mine.exposures_final_with_bactrim plots=oddsratio(logbase=10) descending;
-	class SEX(param=ref ref='1') AGEGRP(param=ref ref='2') REGION(param=ref ref='1') DRUGNAME(param=ref ref='DOXYCYCLINE') PRIOR_HOSP_NEW(param=ref ref='0') CCI_CAT(param=ref ref='0');
-	model CDI_FLAG_NEW = SEX AGEGRP REGION DRUGNAME PRIOR_HOSP_NEW CCI_CAT;
+	class SEX(param=ref ref='1') AGEGRP(param=ref ref='2') REGION(param=ref ref='1') DRUGNAME(param=ref ref='DOXYCYCLINE') PRIOR_HOSPITALIZATION(param=ref ref='0') CCI_CAT(param=ref ref='0');
+	model CDI_FLAG = SEX AGEGRP REGION DRUGNAME PRIOR_HOSPITALIZATION CCI_CAT;
 run;
 
 *stratify bactrim into prophylaxis and non-prophylaxis patients;
@@ -743,6 +743,6 @@ run;
 
 *adjusted logistic regression model with bactrim (split by prophylaxis);
 proc logistic data=mine.exposures_final_with_bactrim_2 plots=oddsratio(logbase=10) descending;
-	class SEX(param=ref ref='1') AGEGRP(param=ref ref='2') REGION(param=ref ref='1') DRUGNAME(param=ref ref='DOXYCYCLINE') PRIOR_HOSP_NEW(param=ref ref='0') CCI_CAT(param=ref ref='0');
-	model CDI_FLAG_NEW = SEX AGEGRP REGION DRUGNAME PRIOR_HOSP_NEW CCI_CAT;
+	class SEX(param=ref ref='1') AGEGRP(param=ref ref='2') REGION(param=ref ref='1') DRUGNAME(param=ref ref='DOXYCYCLINE') PRIOR_HOSPITALIZATION(param=ref ref='0') CCI_CAT(param=ref ref='0');
+	model CDI_FLAG = SEX AGEGRP REGION DRUGNAME PRIOR_HOSPITALIZATION CCI_CAT;
 run;

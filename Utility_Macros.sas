@@ -224,13 +224,13 @@ date and three months after the index date;
         merge &exposures(in=a) &outcomes(in=b keep=ENROLID SVCDATE rename=(SVCDATE=DIAGNOSISDATE));
         if a;
         by ENROLID;
-        if DIAGNOSISDATE and SVCDATE >= DIAGNOSISDATE-90 and DIAGNOSISDATE >= SVCDATE then CDI_FLAG_NEW = 1;
+        if DIAGNOSISDATE and SVCDATE >= DIAGNOSISDATE-90 and DIAGNOSISDATE >= SVCDATE then CDI_FLAG = 1;
         else CDI_FLAG = 0;
     run;
         
     *only take the first diagnosis after antibiotic prescription;
     proc sort data=&output;
-        by ENROLID descending CDI_FLAG_NEW DIAGNOSISDATE;
+        by ENROLID descending CDI_FLAG DIAGNOSISDATE;
         
     data &output;
         set &output;
@@ -238,7 +238,7 @@ date and three months after the index date;
         if FIRST.ENROLID;
     run;
 
-    *drop diagnosis date for patients without CDI_FLAG_NEW = 1;
+    *drop diagnosis date for patients without CDI_FLAG = 1;
     data &output;
         set &output;
         if CDI_FLAG = 0 then DIAGNOSISDATE = .;
