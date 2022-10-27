@@ -10,7 +10,7 @@ Antibiotic exposure is a crucial risk factor for community-acquired _Clostridioi
 
 ## File Structure
 
-> Ideally, files should be accessed and run in this order because data tables were created sequentially from one file to the next.
+> Ideally, files should be accessed and run in this order because data tables were created sequentially across files.
 
 ```
     ├── Utility_Macros.sas
@@ -23,6 +23,8 @@ Antibiotic exposure is a crucial risk factor for community-acquired _Clostridioi
     ├── Tables.sas
     ├── Logistic_Regression.sas
     ├── odds_ratios_plot.R
+    ├── Bactrim_Reviewer_Response.sas
+    ├── CDI_Cases_Reviewer_Response.sas
     └── README.md
 ```
 
