@@ -221,7 +221,9 @@ data mine.drugs_freq_all_by_year;
 run;
 
 /* (LINE PLOT) prescription rates by year*/
-ods graphics / imagefmt=SVG imagemap=off attrpriority=none;
+ods html path="G:/def2004/cdi_marketscan/out";
+ods graphics / imagefmt=SVG imagename="lineplot" imagemap=off attrpriority=none;
+ods listing image_dpi=300;
 
 title "Prescription Rates of Top Antibiotic Classes";
 proc sgplot data=mine.drugs_freq_all_by_year_combined;
@@ -245,3 +247,6 @@ proc sgplot data=mine.drugs_freq_all_by_year_combined;
 				   datalinepatterns=(Solid Dash);
 run;
 title;
+
+ods graphics off;
+ods html close;
