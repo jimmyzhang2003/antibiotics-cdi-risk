@@ -26,8 +26,8 @@ Antibiotic exposure is a crucial risk factor for community-acquired _Clostridioi
 ## Citation
 
 Zhang J, Chen L, Gomez-Simmonds A, Yin MT, Freedberg DE. Antibiotic-Specific Risk for Community-Acquired
-_Clostridioides difficile_ Infection in the United States from 2008 to 2020. _Antimicrobial Agents and Chemotherapy_ (2022).
-Ahead of print. https://doi.org/10.1128/aac.01129-22.
+_Clostridioides difficile_ Infection in the United States from 2008 to 2020. _Antimicrobial Agents and Chemotherapy_, 66(12):
+e01129-22 (2022). https://doi.org/10.1128/aac.01129-22.
 
 ## Contact
 
